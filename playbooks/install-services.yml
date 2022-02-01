@@ -6,6 +6,8 @@
     tasks:
       - name: Installing Apache
         apt: name=apache2 state=present update_cache=yes
+      - name: Ensure apache starts
+        service: name=apache2 state=started enabled=yes
 
   - hosts: webservers
     become: true
@@ -19,3 +21,5 @@
             - php-zip
           state: present
           update_cache: yes
+      - name: Ensure apache starts
+        service: name=apache2 state=started enabled=yes

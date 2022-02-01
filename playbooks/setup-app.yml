@@ -1,0 +1,22 @@
+# setup-app.yml
+
+---
+- hosts: webservers
+  become: true
+  tasks:
+    - name: Upload application file
+      copy:
+        src: ../index.php
+        dest: /var/www/html
+        mode: 0755
+
+    - name: Remove default apache file
+      file: path=/var/www/html/index.html state=absent
+
+    - name: Configure php.ini file
+      lineinfile:
+        path: /etc/php/7.4/apache2/php.ini
+        regexp: ^display_errors
+        line: 'display_errors=Off'
+    - name: Restart apache
+      service: name=apache2 state=restarted
