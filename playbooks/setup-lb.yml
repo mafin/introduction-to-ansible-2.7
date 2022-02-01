@@ -1,0 +1,26 @@
+# setup-lb.yml
+
+---
+- hosts: loadbalancers
+  become: true
+  tasks:
+    - name: Enable mod proxy
+      apache2_module: name=proxy state=present
+
+    - name: Enable mode proxy_http
+      apache2_module: name=proxy_http state=present
+
+    - name: Enable mode lbmethod_byrequests
+      apache2_module: name=lbmethod_byrequests state=present
+
+    - name: Create template
+      template:
+        src: ../config/lb-config.j2
+        dest: /etc/apache2/conf-enabled/lb.conf
+        owner: root
+        group: root
+        mode: 064
+
+    - name: Restart apache
+      service: name=apache2 state=restarted
+
