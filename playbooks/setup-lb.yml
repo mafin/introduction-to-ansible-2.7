@@ -20,7 +20,8 @@
         owner: root
         group: root
         mode: 064
+      notify: Restart apache
 
+  handlers:
     - name: Restart apache
       service: name=apache2 state=restarted
-
