@@ -19,6 +19,14 @@
         dest: "{{ path_to_app }}/info.php"
         content: "<h1>Info about the server {{ ansible_hostname }}</h1><p>System vendor: <b>{{ ansible_system_vendor }}</b></p>"
 
+    - name: See directory contents
+      command: ls -la {{ path_to_app }}
+      register: dir_contents
+
+    - name: Debug direcory contents
+      debug:
+        msg: "{{ dir_contents }}"
+
     - name: Remove default apache file
       file: path="{{ path_to_app }}/index.html" state=absent
 
