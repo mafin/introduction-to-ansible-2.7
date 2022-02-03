@@ -3,15 +3,24 @@
 ---
 - hosts: webservers
   become: true
+
+  vars:
+    path_to_app: "/var/www/html/"
+
   tasks:
     - name: Upload application file
       copy:
         src: ../index.php
-        dest: /var/www/html
+        dest: "{{ path_to_app }}"
         mode: 0755
 
+    - name: Create simple info page
+      copy:
+        dest: "{{ path_to_app }}/info.php"
+        content: "<h1>Info about the server {{ ansible_hostname }}</h1><p>System vendor: <b>{{ ansible_system_vendor }}</b></p>"
+
     - name: Remove default apache file
-      file: path=/var/www/html/index.html state=absent
+      file: path="{{ path_to_app }}/index.html" state=absent
 
     - name: Configure php.ini file
       lineinfile:
