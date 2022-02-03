@@ -1,0 +1,31 @@
+# aws-instance-sandbox.ynl
+---
+- hosts: localhost
+
+  vars:
+    instance_ids:
+      - 'i-'
+    region: eu-west-1
+    aws_access_key: ''
+    aws_secret_key: ''
+
+  tasks:
+    - name: Start ansible-sendbox instances
+      ec2:
+        instance_ids: '{{ instance_ids }}'
+        region: '{{ region }}'
+        aws_access_key: '{{ aws_access_key }}'
+        aws_secret_key: '{{ aws_secret_key }}'
+        state: running
+        wait: True
+      tags:
+        - start
+    - name: Stop ansible-sendbox instances
+      ec2:
+        instance_ids: '{{ instance_ids }}'
+        region: '{{ region }}'
+        profile: '{{ profile }}'
+        state: stopped
+        wait: True
+      tags:
+        - stop
