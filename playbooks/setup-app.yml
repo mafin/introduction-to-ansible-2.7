@@ -13,11 +13,13 @@
         src: ../index.php
         dest: "{{ path_to_app }}"
         mode: 0755
+      tags: upload
 
     - name: Create simple info page
       copy:
         dest: "{{ path_to_app }}/info.php"
         content: "<h1>Info about the server {{ ansible_hostname }}</h1><p>System vendor: <b>{{ ansible_system_vendor }}</b></p>"
+      tags: create
 
     - name: See directory contents
       command: ls -la {{ path_to_app }}
