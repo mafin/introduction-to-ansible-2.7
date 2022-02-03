@@ -1,0 +1,31 @@
+---
+# tasks file for roles/webservers
+
+- name: Upload application file
+  copy:
+    src: ../files/index.php
+    dest: "{{ path_to_app }}"
+    mode: 0755
+
+- name: Create simple info page
+  copy:
+    dest: "{{ path_to_app }}/info.php"
+    content: "<h1>Info about the server {{ ansible_hostname }}</h1><p>System vendor: <b>{{ ansible_system_vendor }}</b></p>"
+
+- name: See directory contents
+  command: ls -la {{ path_to_app }}
+  register: dir_contents
+
+- name: Debug direcory contents
+  debug:
+    msg: "{{ dir_contents }}"
+
+- name: Remove default apache file
+  file: path="{{ path_to_app }}/index.html" state=absent
+
+- name: Configure php.ini file
+  lineinfile:
+    path: /etc/php/7.4/apache2/php.ini
+    regexp: ^display_errors
+    line: 'display_errors=Off'
+  notify: Restart apache
